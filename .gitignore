@@ -1,1 +1,3 @@
 /testing-framework
+/programs/*
+!/programs/*.c
