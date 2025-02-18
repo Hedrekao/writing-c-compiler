@@ -1,0 +1,3 @@
+[submodule "testing-framework"]
+	path = testing-framework
+	url = https://github.com/nlsandler/writing-a-c-compiler-tests.git
