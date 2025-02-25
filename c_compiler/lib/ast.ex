@@ -5,9 +5,9 @@ defmodule Ast do
 
   def pretty_print(ast, indent \\ 1) do
     case ast do
-      {:program, function_definitions} ->
+      {:program, function_definition} ->
         "Program(\n#{indent(indent)}" <>
-          "#{Enum.join(Enum.map(function_definitions, fn f -> pretty_print(f, indent + 1) end), "\n")}" <>
+          "#{pretty_print(function_definition, indent + 1)}" <>
           "\n#{indent(indent - 1)})"
 
       {:function_definition, name, body} ->

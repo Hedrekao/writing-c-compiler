@@ -20,7 +20,7 @@ defmodule Parser do
       {function, remaining_tokens} = parse_function_definition(tokens)
 
       if remaining_tokens == [] do
-        {:ok, Ast.Program.new([function])}
+        {:ok, Ast.Program.new(function)}
       else
         {:error, "Expected EOF, got #{inspect(remaining_tokens)}"}
       end
@@ -60,6 +60,6 @@ defmodule Parser do
   end
 
   defp parse_expression([{:constant, value} | rest]) do
-    {Ast.Expression.constant(value), rest}
+    {Ast.Expression.constant(String.to_integer(value)), rest}
   end
 end
