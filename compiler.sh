@@ -2,7 +2,7 @@
 
 MODE=$1
 
-if [ "$MODE" != "--lex" ] && [ "$MODE" != "--parse" ] && [ "$MODE" != "--compile" ]; then
+if [ "$MODE" != "--lex" ] && [ "$MODE" != "--parse" ] && [ "$MODE" != "--codegen" ] && [ "$MODE" != "--compile" ]; then
     INPUT_FILE=$MODE
     MODE="--compile"
 else
@@ -40,6 +40,16 @@ cd ..
 rm $OUTPUT_FILE.i
 if [ $COMPILER_EXIT_CODE -ne 0 ]; then
     exit $COMPILER_EXIT_CODE
+fi
+
+if [ "$MODE" != "--compile" ]; then
+    exit 0
+fi
+
+gcc $OUTPUT_FILE.s -o $OUTPUT_FILE
+rm $OUTPUT_FILE.s
+if [ $? -ne 0 ]; then
+    exit 1
 fi
 
 exit 0
