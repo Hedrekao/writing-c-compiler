@@ -27,7 +27,9 @@ defmodule CCompiler do
 
   defp compile(file_path, mode) do
     with {:ok, tokens} <- lex_file(file_path),
-         {:ok, ast} <- parse_tokens(tokens) do
+         {:ok, ast} <- parse_tokens(tokens),
+         {:ok, assembly} <- generate_assembly(ast),
+         {:ok} <- emit_assembly(assembly, file_path) do
       case mode do
         "--lex" ->
           IO.inspect(tokens, label: "Tokens")
@@ -35,8 +37,13 @@ defmodule CCompiler do
         "--parse" ->
           IO.puts(Ast.pretty_print(ast))
 
-        _ ->
+        "--codegen" ->
+          IO.inspect(tokens, label: "Tokens")
           IO.puts(Ast.pretty_print(ast))
+          IO.inspect(assembly, label: "Assembly")
+
+        _ ->
+          nil
       end
     end
   end
@@ -61,5 +68,13 @@ defmodule CCompiler do
         IO.puts(:stderr, "Parser error: #{message}")
         System.halt(1)
     end
+  end
+
+  defp generate_assembly(ast) do
+    {:ok, Assembler.parse_program(ast)}
+  end
+
+  defp emit_assembly(assembly, input_file) do
+    CodeEmitter.emit(assembly, input_file)
   end
 end
