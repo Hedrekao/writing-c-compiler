@@ -30,7 +30,6 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# here will be mine compiler later it should return error code if any
 cd ./c_compiler
 shift
 mix run -- "$OUTPUT_FILE.i" "$MODE"
