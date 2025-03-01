@@ -26,25 +26,37 @@ defmodule CCompiler do
   end
 
   defp compile(file_path, mode) do
-    with {:ok, tokens} <- lex_file(file_path),
-         {:ok, ast} <- parse_tokens(tokens),
-         {:ok, assembly} <- generate_assembly(ast),
-         {:ok} <- emit_assembly(assembly, file_path) do
-      case mode do
-        "--lex" ->
+    case mode do
+      "--lex" ->
+        # Only run the lexer
+        with {:ok, tokens} <- lex_file(file_path) do
           IO.inspect(tokens, label: "Tokens")
+        end
 
-        "--parse" ->
+      "--parse" ->
+        # Run lexer and parser
+        with {:ok, tokens} <- lex_file(file_path),
+             {:ok, ast} <- parse_tokens(tokens) do
           IO.puts(Ast.pretty_print(ast))
+        end
 
-        "--codegen" ->
+      "--codegen" ->
+        # Run the full pipeline
+        with {:ok, tokens} <- lex_file(file_path),
+             {:ok, ast} <- parse_tokens(tokens),
+             {:ok, assembly} <- generate_assembly(ast) do
           IO.inspect(tokens, label: "Tokens")
           IO.puts(Ast.pretty_print(ast))
           IO.inspect(assembly, label: "Assembly")
+        end
 
-        _ ->
-          nil
-      end
+      _ ->
+        with {:ok, tokens} <- lex_file(file_path),
+             {:ok, ast} <- parse_tokens(tokens),
+             {:ok, assembly} <- generate_assembly(ast),
+             {:ok} <- emit_assembly(assembly, file_path) do
+          :ok
+        end
     end
   end
 

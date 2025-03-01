@@ -21,6 +21,12 @@ defmodule Ast do
           "#{indent(indent)}#{pretty_print(expression, indent + 1)}\n" <>
           "#{indent(indent - 1)})"
 
+      {:unary, operator, expression} ->
+        "Unary(\n" <>
+          "#{indent(indent)}operator=#{operator},\n" <>
+          "#{indent(indent)}expression=\n#{pretty_print(expression, indent + 1)}\n" <>
+          "#{indent(indent - 1)})"
+
       {:constant, value} ->
         "#{indent(indent)}Constant(#{value})"
 
@@ -44,5 +50,12 @@ defmodule Ast do
   defmodule Expression do
     def constant(value), do: {:constant, value}
     def identifier(value), do: {:identifier, value}
+    def unary(operator, expresion), do: {:unary, operator, expresion}
   end
+
+  defmodule UnaryOperator do
+    def negation, do: :negation
+    def bitwise_complement, do: :bitwise_complement
+  end
+
 end

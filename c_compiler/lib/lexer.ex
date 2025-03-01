@@ -1,11 +1,16 @@
 defmodule Lexer do
-  @identifier_regex ~r/^[a-zA-Z_]\w*\b/
-  @constant_regex ~r/^[0-9]+\b/
-  @open_parenthesis_regex ~r/^\(/
-  @close_parenthesis_regex ~r/^\)/
-  @open_brace_regex ~r/^{/
-  @close_brace_regex ~r/^}/
-  @semicolon_regex ~r/^;/
+  @token_patterns [
+    {~r/^[a-zA-Z_]\w*\b/, :identifier},
+    {~r/^[0-9]+\b/, :constant},
+    {~r/^\(/, :open_parenthesis},
+    {~r/^\)/, :close_parenthesis},
+    {~r/^{/, :open_brace},
+    {~r/^}/, :close_brace},
+    {~r/^;/, :semicolon},
+    {~r/^-/, :negation},
+    {~r/^--/, :decrement},
+    {~r/^~/, :bitwise_complement}
+  ]
 
   defp lex_rec(input, tokens) when input != "" do
     # Skip whitespace
@@ -52,15 +57,7 @@ defmodule Lexer do
   end
 
   defp get_all_matches(input) do
-    [
-      {@identifier_regex, :identifier},
-      {@constant_regex, :constant},
-      {@open_parenthesis_regex, :open_parenthesis},
-      {@close_parenthesis_regex, :close_parenthesis},
-      {@open_brace_regex, :open_brace},
-      {@close_brace_regex, :close_brace},
-      {@semicolon_regex, :semicolon}
-    ]
+    @token_patterns
     |> Enum.map(fn {regex, token} -> {Regex.run(regex, input), token} end)
     |> Enum.filter(fn {match, _} -> match != [] and match != nil end)
   end

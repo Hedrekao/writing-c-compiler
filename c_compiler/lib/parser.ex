@@ -62,4 +62,15 @@ defmodule Parser do
   defp parse_expression([{:constant, value} | rest]) do
     {Ast.Expression.constant(String.to_integer(value)), rest}
   end
+
+  defp parse_expression([{unary_operand, _} | rest])
+       when unary_operand == :negation or unary_operand == :bitwise_complement do
+    {expression, rest} = parse_expression(rest)
+    {Ast.Expression.unary(unary_operand, expression), rest}
+  end
+
+  defp parse_expression([{:open_parenthesis, _} | rest]) do
+    {expression, rest} = parse_expression(rest)
+    {expression, expect_token(rest, :close_parenthesis)}
+  end
 end
