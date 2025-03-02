@@ -1,12 +1,11 @@
 defmodule TackyEmitter do
-  def emit_tacky({:program, function_definition}) do
+  def emit({:program, function_definition}) do
     function = emit_function(function_definition)
     Tacky.Program.new(function)
   end
 
   defp emit_function({:function_definition, {_, name}, body}) do
     {instructions, _} = emit_statement(body, 0)
-    name = Tacky.Value.var(name)
     Tacky.FunctionDefinition.new(name, instructions)
   end
 

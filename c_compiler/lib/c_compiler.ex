@@ -91,7 +91,7 @@ defmodule CCompiler do
   end
 
   defp emit_tacky(ast) do
-    {:ok, TackyEmitter.emit_tacky(ast)}
+    {:ok, TackyEmitter.emit(ast)}
   end
 
   defp generate_assembly(ast) do

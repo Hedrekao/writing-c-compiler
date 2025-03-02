@@ -12,7 +12,7 @@ defmodule Tacky do
 
       {:function_definition, name, instructions} ->
         "Function(\n" <>
-          "#{indent(indent)}name=#{pretty_print(name, indent + 1)},\n" <>
+          "#{indent(indent)}name=\"#{name}\",\n" <>
           "#{indent(indent)}body=\n#{indent(indent)}  #{Enum.join(Enum.map(instructions, fn instruction -> pretty_print(instruction, indent + 1) end), ",\n#{indent(indent)}  ")}\n" <>
           "#{indent(indent - 1)})"
 
