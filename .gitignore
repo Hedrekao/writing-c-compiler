@@ -1,5 +1,7 @@
 /testing-framework
 /programs/*
+test.c
+**/CLAUDE.md
 
 **/_build
 **/cover

@@ -2,7 +2,7 @@
 
 MODE=$1
 
-if [ "$MODE" != "--lex" ] && [ "$MODE" != "--parse" ] && [ "$MODE" != "--codegen" ] && [ "$MODE" != "--compile" ]; then
+if [ "$MODE" != "--lex" ] && [ "$MODE" != "--parse" ] && [ "$MODE" != "--tacky" ] && [ "$MODE" != "--codegen" ] && [ "$MODE" != "--compile" ]; then
     INPUT_FILE=$MODE
     MODE="--compile"
 else

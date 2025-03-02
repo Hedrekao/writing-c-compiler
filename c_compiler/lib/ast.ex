@@ -18,11 +18,11 @@ defmodule Ast do
 
       {:return, expression} ->
         "Return(\n" <>
-          "#{indent(indent)}#{pretty_print(expression, indent + 1)}\n" <>
+          "#{pretty_print(expression, indent + 1)}\n" <>
           "#{indent(indent - 1)})"
 
       {:unary, operator, expression} ->
-        "Unary(\n" <>
+        "#{indent(indent)}Unary(\n" <>
           "#{indent(indent)}operator=#{operator},\n" <>
           "#{indent(indent)}expression=\n#{pretty_print(expression, indent + 1)}\n" <>
           "#{indent(indent - 1)})"
@@ -57,5 +57,4 @@ defmodule Ast do
     def negation, do: :negation
     def bitwise_complement, do: :bitwise_complement
   end
-
 end

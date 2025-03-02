@@ -40,6 +40,14 @@ defmodule CCompiler do
           IO.puts(Ast.pretty_print(ast))
         end
 
+      "--tacky" ->
+        # Run lexer, parser, and tacky code generator
+        with {:ok, tokens} <- lex_file(file_path),
+             {:ok, ast} <- parse_tokens(tokens),
+             {:ok, tacky} <- emit_tacky(ast) do
+          IO.puts(Tacky.pretty_print(tacky))
+        end
+
       "--codegen" ->
         # Run the full pipeline
         with {:ok, tokens} <- lex_file(file_path),
@@ -82,6 +90,10 @@ defmodule CCompiler do
     end
   end
 
+  defp emit_tacky(ast) do
+    {:ok, TackyEmitter.emit_tacky(ast)}
+  end
+
   defp generate_assembly(ast) do
     {:ok, Assembler.parse_program(ast)}
   end
@@ -89,4 +101,5 @@ defmodule CCompiler do
   defp emit_assembly(assembly, input_file) do
     CodeEmitter.emit(assembly, input_file)
   end
+
 end
